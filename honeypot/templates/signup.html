@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OP Health Systems — Create Account</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-signup">
+
+  <div class="page-center">
+    <div class="glass-card" style="max-width:440px;">
+
+      <!-- Logo -->
+      <div class="logo-wrap">
+        <div class="logo-icon" style="background:linear-gradient(135deg,#16a34a,#0ea5e9)">👤</div>
+        <div class="logo-title">Create Account</div>
+        <div class="logo-sub">Employee Self-Registration</div>
+      </div>
+
+      {% if error %}
+        <div class="alert alert-error">⚠ {{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="/signup" autocomplete="off">
+
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-input" type="text" id="username" name="username"
+                 placeholder="Choose a username" required autofocus
+                 pattern="[a-zA-Z0-9_]{3,20}" title="3–20 alphanumeric characters">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" name="password"
+                 placeholder="Choose a password (min. 6 chars)" required minlength="6">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirm">Confirm Password</label>
+          <input class="form-input" type="password" id="confirm" name="confirm"
+                 placeholder="Repeat your password" required>
+        </div>
+
+        <!-- Password strength indicator -->
+        <div style="margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;
+                      font-family:'Inter',sans-serif;font-size:0.72rem;
+                      color:rgba(255,255,255,0.4);margin-bottom:0.35rem;">
+            <span>Password strength</span>
+            <span id="pw-label">—</span>
+          </div>
+          <div style="height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;">
+            <div id="pw-bar" style="height:100%;width:0;border-radius:2px;transition:all 0.3s;"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create Account</button>
+      </form>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">Already have an account?</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <a href="/" class="btn btn-ghost" style="display:block;text-align:center;text-decoration:none;">
+        ← Back to Sign In
+      </a>
+
+      <p style="text-align:center;margin-top:1.4rem;font-family:'Inter',sans-serif;
+                 font-size:0.72rem;color:rgba(255,255,255,0.25);line-height:1.5;">
+        Accounts are subject to IT Security review.<br>
+        Standard user access only. Admin access requires authorisation.
+      </p>
+
+    </div>
+  </div>
+
+  <script>
+    const pwInput = document.getElementById('password');
+    const pwBar   = document.getElementById('pw-bar');
+    const pwLabel = document.getElementById('pw-label');
+
+    pwInput.addEventListener('input', () => {
+      const v = pwInput.value;
+      let score = 0;
+      if (v.length >= 6)  score++;
+      if (v.length >= 10) score++;
+      if (/[A-Z]/.test(v)) score++;
+      if (/[0-9]/.test(v)) score++;
+      if (/[^a-zA-Z0-9]/.test(v)) score++;
+
+      const levels = [
+        { w:'0%',   color:'transparent', label:'—' },
+        { w:'25%',  color:'#ef4444',     label:'Weak' },
+        { w:'50%',  color:'#f59e0b',     label:'Fair' },
+        { w:'75%',  color:'#3b82f6',     label:'Good' },
+        { w:'100%', color:'#22c55e',     label:'Strong' },
+      ];
+      const l = levels[Math.min(score, 4)];
+      pwBar.style.width       = l.w;
+      pwBar.style.background  = l.color;
+      pwLabel.textContent     = l.label;
+      pwLabel.style.color     = l.color;
+    });
+
+    // Client-side confirm check
+    document.querySelector('form').addEventListener('submit', e => {
+      const pw  = document.getElementById('password').value;
+      const cfm = document.getElementById('confirm').value;
+      if (pw !== cfm) {
+        e.preventDefault();
+        alert('Passwords do not match.');
+      }
+    });
+  </script>
+
+</body>
+</html>

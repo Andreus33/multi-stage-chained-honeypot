@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ubuntu Server 22.04 LTS — fileserver</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-terminal">
+
+  <!-- Ransomware Overlay -->
+  <div class="overlay" id="ransomOverlay">
+    <div class="ransom-card">
+      <div class="ransom-skull">💀</div>
+      <div class="ransom-title">SYSTEM COMPROMISED</div>
+      <div class="ransom-msg">Hey hacker, you have installed Ransomware!</div>
+      <div class="ransom-sub">
+        All files on this system are being encrypted.<br>
+        Your activity has been logged and reported.
+      </div>
+      <div class="ransom-bar"><div class="ransom-bar-fill"></div></div>
+      <button class="ransom-close" onclick="closeRansom()">[ DISMISS ]</button>
+    </div>
+  </div>
+
+  <!-- Terminal Layout -->
+  <div class="terminal-layout">
+
+    <!-- macOS-style title bar -->
+    <div class="term-topbar">
+      <div class="term-dots">
+        <div class="term-dot td-red"></div>
+        <div class="term-dot td-yellow"></div>
+        <div class="term-dot td-green"></div>
+      </div>
+      <div class="term-title">admin@fileserver: ~</div>
+      <div class="term-info">SSH · 192.168.1.100 · Port 22</div>
+    </div>
+
+    <!-- Terminal window -->
+    <div class="term-window">
+      <div class="term-body">
+
+        <!-- Ubuntu boot header -->
+        <div class="term-boot">
+          <div class="ub-title">Ubuntu 22.04.3 LTS</div>
+          <div><span class="ub-ok">  * </span>System information as of {{ "{0}".format("Wed Nov 13 14:32:01 UTC 2024") }}</div>
+          <div><span class="ub-info">  System load:    0.12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <span class="ub-info">Users logged in:  1</span></div>
+          <div><span class="ub-info">  Usage of /:     34.2% of 48.91GB</span>&nbsp;
+               <span class="ub-info">IPv4 address for eth0: 192.168.1.100</span></div>
+          <div><span class="ub-info">  Memory usage:   23%</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <span class="ub-info">Swap usage:       0%</span></div>
+          <div>&nbsp;</div>
+          <div><span style="color:#fbbf24"> * </span>47 updates can be applied immediately.</div>
+          <div><span style="color:#fbbf24"> * </span>To see these additional updates run: apt list --upgradable</div>
+          <div>&nbsp;</div>
+          <div>Last login: Wed Nov 13 08:14:22 2024 from 10.0.0.55</div>
+        </div>
+
+        <!-- Output area -->
+        <div id="output"><span class="out-prompt"><span class="pu">admin</span><span class="ph">@fileserver</span><span class="ps">:~$</span></span> <span class="cursor-blink"></span></div>
+
+        <!-- Input row -->
+        <div class="term-input-row" id="inputRow">
+          <span class="term-prompt-label">
+            <span class="pu">admin</span><span class="ph">@fileserver</span><span class="ps">:~$&nbsp;</span>
+          </span>
+          <input id="cmd" type="text"
+                 onkeydown="runCommand(event)"
+                 autocomplete="off" autocorrect="off"
+                 autocapitalize="off" spellcheck="false"
+                 autofocus>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/terminal.js') }}"></script>
+  <script>
+    // Remove the initial cursor once user starts typing
+    document.getElementById('cmd').addEventListener('input', () => {
+      const cursor = document.querySelector('.cursor-blink');
+      if (cursor) cursor.remove();
+    }, { once: true });
+  </script>
+
+</body>
+</html>
